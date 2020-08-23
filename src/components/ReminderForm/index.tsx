@@ -9,12 +9,16 @@ interface ReminderFormProps {
   reminderId?: string;
 }
 
-const ReminderForm: React.FC<ReminderFormProps> = ({ reminderId }) => {
+const ReminderForm: React.FC<ReminderFormProps> = ({
+  reminderId,
+  handleCloseModal,
+}) => {
   const {
     getReminder,
     availableColors,
     addReminder,
     updateReminder,
+    removeReminder,
   } = useCalendar();
   const [selectedColor, setSelectedColor] = useState('');
   const [title, setTitle] = useState<string>();
@@ -37,6 +41,12 @@ const ReminderForm: React.FC<ReminderFormProps> = ({ reminderId }) => {
       setSelectedColor(reminder.color);
     }
   }, [reminderId, getReminder]);
+
+  const handleDeleteReminder = useCallback(() => {
+    if (!reminderId) return;
+    removeReminder(reminderId);
+    if (handleCloseModal) handleCloseModal();
+  }, [removeReminder, handleCloseModal, reminderId]);
 
   const handleNewReminder = useCallback(
     (e: FormEvent) => {
@@ -186,7 +196,11 @@ const ReminderForm: React.FC<ReminderFormProps> = ({ reminderId }) => {
         )}
         <S.Buttons>
           <S.SubmitButton type="submit">Save</S.SubmitButton>
-          {reminderId && <S.DeleteButton>Delete</S.DeleteButton>}
+          {reminderId && (
+            <S.DeleteButton onClick={handleDeleteReminder}>
+              Delete
+            </S.DeleteButton>
+          )}
         </S.Buttons>
       </form>
     </S.Container>

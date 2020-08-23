@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { lighten } from 'polished';
+import { lighten, darken } from 'polished';
 
 interface DayProps {
   isToday: boolean;
@@ -12,6 +12,7 @@ interface ReminderButtonProps {
 
 interface TooltipProps {
   isOpen: boolean;
+  color: string;
 }
 
 export const TableHeader = styled.div`
@@ -97,9 +98,26 @@ export const Tooltip = styled.div<TooltipProps>`
   z-index: 1;
   div {
     margin-top: 1rem;
-    color: #222;
-    background: #fff;
+    color: #fff;
+    background: ${({ color }) => color};
     border-radius: 0.5rem;
     box-shadow: 0px 1rem 2rem rgba(0, 0, 0, 0.25);
+    text-align: center;
+    padding: 1rem;
+    h3 {
+      border-bottom: 0.1rem solid rgba(255, 255, 255, 0.5);
+      margin-bottom: 0.5rem;
+    }
+    p {
+      padding: 0.5rem 0;
+    }
+    > button {
+      margin-top: 1rem;
+      color: #fff;
+      border: 0.2rem solid #fff;
+      width: 100%;
+      border-radius: 0.5rem;
+      background: ${({ color }) => lighten('0.05', color)};
+    }
   }
 `;

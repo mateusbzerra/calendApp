@@ -8,7 +8,9 @@ import {
   isSameDay,
   isSameMonth,
   set,
+  format,
 } from 'date-fns';
+import enUS from 'date-fns/locale/en-US';
 
 import { GrNext, GrPrevious } from 'react-icons/gr';
 import * as S from './styles';
@@ -18,7 +20,9 @@ import ReminderForm from '../ReminderForm';
 
 const Calendar: React.FC = () => {
   const [today, setToday] = useState(new Date());
-  const [selectedReminder, setSelectedReminder] = useState<string>();
+  const [selectedReminder, setSelectedReminder] = useState<string>(
+    '1598150635501'
+  );
   const [openModal, setOpenModal] = useState(false);
 
   const months = useMemo(
@@ -43,48 +47,41 @@ const Calendar: React.FC = () => {
     []
   );
 
-  const days = useMemo(() => {
-    return eachDayOfInterval({
-      start: startOfMonth(today),
-      end: endOfMonth(today),
-    });
-  }, [today]);
+  const firstDayISO = useMemo(() => getISODay(startOfMonth(today)), [today]);
+  const lastDayOfPreviousMonth = useMemo(
+    () => endOfMonth(new Date(today.getFullYear(), today.getMonth() - 1)),
+    [today]
+  );
 
-  useEffect(() => {
-    const firstDayInMonth = startOfMonth(today);
-    const firstDayISO = getISODay(firstDayInMonth);
-    const lastDayOfPreviousMonth = endOfMonth(
-      new Date(today.getFullYear(), today.getMonth() - 1)
-    );
-    new Array(firstDayISO)
-      .fill(0)
-      .map((item, index) =>
-        days.unshift(
-          new Date(
-            lastDayOfPreviousMonth.getFullYear(),
-            lastDayOfPreviousMonth.getMonth(),
-            lastDayOfPreviousMonth.getDate() - index
-          )
-        )
-      );
-  }, [today, days]);
+  const days = eachDayOfInterval({
+    start: startOfMonth(today),
+    end: endOfMonth(today),
+  });
 
-  useEffect(() => {
-    const lastDayOfCurrentMonth = getISODay(
-      endOfMonth(new Date(today.getFullYear(), today.getMonth()))
-    );
-    new Array(lastDayOfCurrentMonth === 7 ? 6 : 6 - lastDayOfCurrentMonth)
-      .fill(0)
-      .map((item, index) =>
-        days.push(
-          new Date(today.getFullYear(), today.getMonth() + 1, index + 1)
+  new Array(firstDayISO)
+    .fill(0)
+    .map((item, index) =>
+      days.unshift(
+        new Date(
+          lastDayOfPreviousMonth.getFullYear(),
+          lastDayOfPreviousMonth.getMonth(),
+          lastDayOfPreviousMonth.getDate() - index
         )
-      );
-  }, [days, today]);
+      )
+    );
+
+  const lastDayOfCurrentMonth = getISODay(
+    endOfMonth(new Date(today.getFullYear(), today.getMonth()))
+  );
+
+  new Array(lastDayOfCurrentMonth === 7 ? 6 : 6 - lastDayOfCurrentMonth)
+    .fill(0)
+    .map((item, index) =>
+      days.push(new Date(today.getFullYear(), today.getMonth() + 1, index + 1))
+    );
 
   const handleSelectedReminder = useCallback((id: string) => {
-    // setOpenModal(true);
-    setSelectedReminder(id);
+    setSelectedReminder((oldId) => (id === oldId ? '' : id));
   }, []);
   const handleUpdateReminder = useCallback(() => {
     setOpenModal(true);
@@ -154,10 +151,20 @@ const Calendar: React.FC = () => {
                         >
                           {item.title}
                         </S.ReminderButton>
-                        <S.Tooltip isOpen={selectedReminder === item.id}>
+                        <S.Tooltip
+                          isOpen={selectedReminder === item.id}
+                          color={item.color}
+                        >
                           <div>
-                            <h2>{item.title}</h2>
-                            <h3>{item.city}</h3>
+                            <h3>{item.title}</h3>
+                            <p>
+                              {format(
+                                new Date(item.datetime),
+                                "EEEE',' MMMM', 'dd', ' yyyy 'at' HH:mm'h'",
+                                { locale: enUS }
+                              )}
+                            </p>
+                            <p>{item.city}</p>
                             <button
                               type="button"
                               onClick={handleUpdateReminder}
