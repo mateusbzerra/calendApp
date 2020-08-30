@@ -69,12 +69,6 @@ export const ErrorMessage = styled.p`
   text-align: center;
 `;
 
-export const SuccessMessage = styled(ErrorMessage)`
-  color: #99c24d;
-  padding: 2rem 0;
-  text-align: center;
-`;
-
 export const Buttons = styled.div`
   display: flex;
   flex-direction: row-reverse;

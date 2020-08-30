@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import React, { Fragment, useState, useCallback, useMemo } from 'react';
 import {
   eachDayOfInterval,
   startOfMonth,
@@ -8,11 +8,10 @@ import {
   isSameDay,
   isSameMonth,
   set,
-  format,
 } from 'date-fns';
-import enUS from 'date-fns/locale/en-US';
-
 import { GrNext, GrPrevious } from 'react-icons/gr';
+import Tooltip from '../Tooltip';
+
 import * as S from './styles';
 import { useCalendar } from '../../hooks/calendar';
 import Modal from '../Modal';
@@ -141,39 +140,26 @@ const Calendar: React.FC = () => {
                   .filter((reminder) =>
                     isSameDay(new Date(reminder.datetime), day)
                   )
-                  .map((item) => {
+                  .map((item, _, arrayOfItems) => {
                     return (
-                      <div key={item.id}>
+                      <Fragment key={item.id}>
                         <S.ReminderButton
                           type="button"
                           color={item.color}
+                          small={arrayOfItems.length > 3}
                           onClick={() => handleSelectedReminder(item.id)}
                         >
-                          {item.title}
+                          {arrayOfItems.length > 3
+                            ? `${item.title.substring(0, 6)}...`
+                            : item.title}
                         </S.ReminderButton>
-                        <S.Tooltip
+                        <Tooltip
+                          reminder={item}
                           isOpen={selectedReminder === item.id}
                           color={item.color}
-                        >
-                          <div>
-                            <h3>{item.title}</h3>
-                            <p>
-                              {format(
-                                new Date(item.datetime),
-                                "EEEE',' MMMM', 'dd', ' yyyy 'at' HH:mm'h'",
-                                { locale: enUS }
-                              )}
-                            </p>
-                            <p>{item.city}</p>
-                            <button
-                              type="button"
-                              onClick={handleUpdateReminder}
-                            >
-                              Edit
-                            </button>
-                          </div>
-                        </S.Tooltip>
-                      </div>
+                          handleUpdateReminder={handleUpdateReminder}
+                        />
+                      </Fragment>
                     );
                   })}
               </div>

@@ -1,11 +1,11 @@
 import React, { useState, useCallback, FormEvent, useEffect } from 'react';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
+import { useToasts } from 'react-toast-notifications';
 import { useCalendar } from '../../hooks/calendar';
-
 import * as S from './styles';
 
 interface ReminderFormProps {
-  handleCloseModal?(): void;
+  handleCloseModal(): void;
   reminderId?: string;
 }
 
@@ -13,6 +13,7 @@ const ReminderForm: React.FC<ReminderFormProps> = ({
   reminderId,
   handleCloseModal,
 }) => {
+  const { addToast } = useToasts();
   const {
     getReminder,
     availableColors,
@@ -27,7 +28,6 @@ const ReminderForm: React.FC<ReminderFormProps> = ({
   const [minutes, setMinutes] = useState<string>();
   const [city, setCity] = useState<string>();
   const [errorMessage, setErrorMessage] = useState<string>();
-  const [successMessage, setSuccessMessage] = useState<string>();
 
   useEffect(() => {
     if (reminderId) {
@@ -45,8 +45,12 @@ const ReminderForm: React.FC<ReminderFormProps> = ({
   const handleDeleteReminder = useCallback(() => {
     if (!reminderId) return;
     removeReminder(reminderId);
+    addToast('Reminder successfully deleted', {
+      autoDismiss: false,
+      appearance: 'success',
+    });
     if (handleCloseModal) handleCloseModal();
-  }, [removeReminder, handleCloseModal, reminderId]);
+  }, [addToast, removeReminder, handleCloseModal, reminderId]);
 
   const handleNewReminder = useCallback(
     (e: FormEvent) => {
@@ -91,7 +95,11 @@ const ReminderForm: React.FC<ReminderFormProps> = ({
           city,
           color: selectedColor,
         });
-        setSuccessMessage('Reminder successfully created');
+        addToast('Reminder successfully created', {
+          appearance: 'success',
+          autoDismiss: true,
+        });
+        handleCloseModal();
         return;
       }
 
@@ -102,7 +110,12 @@ const ReminderForm: React.FC<ReminderFormProps> = ({
         city,
         color: selectedColor,
       });
-      setSuccessMessage('Reminder updated successfully');
+      addToast('Reminder updated successfully', {
+        appearance: 'success',
+        autoDismiss: true,
+      });
+
+      handleCloseModal();
     },
     [
       title,
@@ -114,6 +127,8 @@ const ReminderForm: React.FC<ReminderFormProps> = ({
       reminderId,
       addReminder,
       updateReminder,
+      handleCloseModal,
+      addToast,
     ]
   );
 
@@ -191,9 +206,6 @@ const ReminderForm: React.FC<ReminderFormProps> = ({
             ))}
         </S.Colors>
         {errorMessage && <S.ErrorMessage>{errorMessage}</S.ErrorMessage>}
-        {successMessage && (
-          <S.SuccessMessage>{successMessage}</S.SuccessMessage>
-        )}
         <S.Buttons>
           <S.SubmitButton type="submit">Save</S.SubmitButton>
           {reminderId && (

@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { lighten, darken } from 'polished';
+import { lighten } from 'polished';
 
 interface DayProps {
   isToday: boolean;
@@ -8,11 +8,11 @@ interface DayProps {
 
 interface ReminderButtonProps {
   color: string;
+  small: boolean;
 }
 
-interface TooltipProps {
-  isOpen: boolean;
-  color: string;
+interface ReminderButtonContainerProps {
+  small: boolean;
 }
 
 export const TableHeader = styled.div`
@@ -63,12 +63,13 @@ export const Day = styled.div<DayProps>`
 `;
 
 export const ReminderButton = styled.button<ReminderButtonProps>`
-  /* background-color: ${({ color }) => color}; */
   background: ${({ color }) =>
-    `linear-gradient(90deg, ${color}, ${lighten('0.2', color)});`};
-  width: 100%;
-  font-size: 1.2rem;
+    `linear-gradient(90deg, ${color}, ${lighten('0.1', color)});`};
+  width: ${({ small }) => (small ? '50%' : '100%')};
+  font-size: ${({ small }) => (small ? '1rem' : '1.2rem')};
   color: #fff;
+  padding: 1px 0px;
+  margin: 0px;
 `;
 
 export const TableOfDays = styled.div`
@@ -80,44 +81,5 @@ export const ListOfWeekNames = styled(TableOfDays)`
     text-align: right;
     font-size: 1.8rem;
     padding: 2rem 1rem;
-    /* background-color: #006e90;
-    color: #fff;
-    text-align: center;
-    padding: 1.5rem; */
-  }
-`;
-
-export const Tooltip = styled.div<TooltipProps>`
-  visibility: ${(props) => (props.isOpen ? 'visible' : 'hidden')};
-  position: absolute;
-
-  width: 200px;
-  height: 200px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1;
-  div {
-    margin-top: 1rem;
-    color: #fff;
-    background: ${({ color }) => color};
-    border-radius: 0.5rem;
-    box-shadow: 0px 1rem 2rem rgba(0, 0, 0, 0.25);
-    text-align: center;
-    padding: 1rem;
-    h3 {
-      border-bottom: 0.1rem solid rgba(255, 255, 255, 0.5);
-      margin-bottom: 0.5rem;
-    }
-    p {
-      padding: 0.5rem 0;
-    }
-    > button {
-      margin-top: 1rem;
-      color: #fff;
-      border: 0.2rem solid #fff;
-      width: 100%;
-      border-radius: 0.5rem;
-      background: ${({ color }) => lighten('0.05', color)};
-    }
   }
 `;

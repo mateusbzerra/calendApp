@@ -34,16 +34,20 @@ const CalendarProvider: React.FC = ({ children }) => {
   const [reminders, setReminders] = useState<Reminder[]>(() => {
     const storagedRepositories = localStorage.getItem('@CalendApp:reminders');
     if (storagedRepositories) {
-      const data = JSON.parse(storagedRepositories);
+      const data = JSON.parse(storagedRepositories).map(
+        (reminder: Reminder) => ({
+          ...reminder,
+          datetime: new Date(reminder.datetime),
+        })
+      );
 
       return orderBy(data, 'datetime', 'asc');
     }
     return [];
   });
   const availableColors = useMemo(() => {
-    return ['#4c4cff', '#601e9e', '#3d7b00', '#8f2323', '#a65200'];
+    return ['#4c4cff', '#601e9e', '#3d7b00', '#8f2323', '#e69500'];
   }, []);
-
   useEffect(() => {
     localStorage.setItem('@CalendApp:reminders', JSON.stringify(reminders));
   }, [reminders]);
@@ -115,7 +119,6 @@ const CalendarProvider: React.FC = ({ children }) => {
       }}
     >
       {children}
-      {/* <ToastContainer messages={messages} /> */}
     </CalendarContext.Provider>
   );
 };

@@ -11,7 +11,7 @@ const Home: React.FC = () => {
   const [openModal, setOpenModal] = useState(false);
 
   return (
-    <>
+    <S.Container>
       <Header />
       <S.Content>
         <S.ContentHeader>
@@ -32,7 +32,7 @@ const Home: React.FC = () => {
       </S.Content>
 
       <Footer />
-    </>
+    </S.Container>
   );
 };
 
