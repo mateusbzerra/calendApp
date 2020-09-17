@@ -1,9 +1,18 @@
-<p align="center">
-<img src="./screenshots/ipad.png" float="right" width="350" />
-</p>
-Live preview <a href="calendapplication.netlify.app">here</a>
+<div align="center">
+  <img src="./public/logo192.png" float="right" width="96" /><br/>
+  <h2 style="margin-top:-10px" align="center">CalendApp</h2>
+  <p style="margin-top:-20px">
+  CalendApp is a <b>Single Page Application</b> to add, view, update and delete calendar reminders!
+  </p>
+</div>
 
-CalendApp is a **Single Page Application** to add, view, update and delete calendar reminders!
+## Preview
+
+<p align="center">
+  <img src="./screenshots/ipad.png" float="right" width="350" />
+</p>
+
+Check out the live preview <a href="https://calendapplication.netlify.app">here</a> :)
 
 ## Technologies
 
@@ -23,7 +32,7 @@ CalendApp is a **Single Page Application** to add, view, update and delete calen
 
 > To generate a production version, run `npm run build` or `yarn build`
 
-## Setup Tests
+## Run Tests
 
 1. `npm test` or `yarn test`
 
