@@ -18,7 +18,7 @@ const api = axios.create({
   baseURL: 'https://api.openweathermap.org/data/2.5',
 });
 
-const API_KEY = '7fd95506b0204a8f413f95ad8e6a9d17';
+const API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
 
 const getLocationWeather = (
   location: string
