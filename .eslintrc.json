@@ -34,12 +34,6 @@
     "import/prefer-default-export": "off",
     "@typescript-eslint/camelcase": "off",
     "import/no-duplicates": "off",
-    "@typescript-eslint/explicit-function-return-type": [
-      "error",
-      {
-        "allowExpressions": true
-      }
-    ],
     "prettier/prettier": "error",
     "import/extensions": [
       "error",
@@ -48,7 +42,8 @@
         "ts": "never",
         "tsx": "never"
       }
-    ]
+    ],
+    "react/require-default-props": "off"
   },
   "settings": {
     "import/resolver": {
