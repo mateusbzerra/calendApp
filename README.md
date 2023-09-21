@@ -1,3 +1,14 @@
+⚠️ Refactor in Progress ⚠️
+
+Check out the refactor branch [here](https://github.com/mateusbzerra/calendApp/tree/refactor-calendar-logic)
+  - Separate logic in small services
+  - Cover all files with unit tests
+  - Update React & React Scripts
+  - Improve Calendar Day Picker
+  - Handle form with `react-final-form`
+  - Add cypress tests
+
+
 <div align="center">
   <img src="./public/logo192.png" float="right" width="96" /><br/>
   <h2 style="margin-top:-10px" align="center">CalendApp</h2>
